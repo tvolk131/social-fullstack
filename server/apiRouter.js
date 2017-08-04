@@ -10,6 +10,10 @@ router.get('/messages', passport.authenticate('local-signup', {
   res.end();
 });
 
+router.get('/currentuser', (req, res) => {
+  res.end(res.user);
+});
+
 router.get('/*', (req, res) => {
   res.end();
 });

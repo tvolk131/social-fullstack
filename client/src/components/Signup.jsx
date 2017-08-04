@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 
-class Search extends React.Component {
+class Signup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -63,15 +63,20 @@ class Search extends React.Component {
   render() {
     return (
       <div>
-        <h1>Signup</h1>
-        First Name:<br/><input type='text' value={this.state.firstname} onChange={this.handleInputChange.bind(this, 'firstname')} /><br/>
-        Last Name:<br/><input type='text' value={this.state.lastname} onChange={this.handleInputChange.bind(this, 'lastname')} /><br/>
-        Email:<br/><input type='email' value={this.state.email} onChange={this.handleInputChange.bind(this, 'email')} /><br/>
-        Password:<br/><input type='password' value={this.state.password} onChange={this.handleInputChange.bind(this, 'password')} /><br/>
-        <button onClick={this.sendUserData}>Create Account</button>
+        <div className='signup'>
+          <h1>Signup</h1>
+          First Name:<br/><input type='text' value={this.state.firstname} onChange={this.handleInputChange.bind(this, 'firstname')} /><br/>
+          Last Name:<br/><input type='text' value={this.state.lastname} onChange={this.handleInputChange.bind(this, 'lastname')} /><br/>
+          Email:<br/><input type='email' value={this.state.email} onChange={this.handleInputChange.bind(this, 'email')} /><br/>
+          Password:<br/><input type='password' value={this.state.password} onChange={this.handleInputChange.bind(this, 'password')} /><br/>
+          <button onClick={this.sendUserData}>Create Account</button>
+        </div>
+        <div>
+          <p>Already have an account? <a href='/login'>sign in</a></p>
+        </div>
       </div>
     ) 
   }
 }
 
-export default Search;
+export default Signup;
