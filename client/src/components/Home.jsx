@@ -1,42 +1,30 @@
 import React from 'react';
 import axios from 'axios';
 
-class Search extends React.Component {
+class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: ''
+      user: {}
     }
-    this.onChange = this.onChange.bind(this);
-    this.search = this.search.bind(this);
     this.getData();
-  }
-
-  onChange (e) {
-    this.setState({
-      term: e.target.value
-    });
   }
 
   getData () {
     axios.get('/api/currentuser')
     .then((data) => {
-      this.setState({username: data.data});
+      this.setState({user: data.data});
     });
-  }
-
-  search() {
-    this.props.onSearch(this.state.term);
   }
 
   render() {
     return (
       <div>
         <div>HOMEPAGE</div>
-        <div>User: {this.state.username}</div>
+        <div>User: {this.state.user.firstname} {this.state.user.lastname}</div>
       </div>
     ) 
   }
 }
 
-export default Search;
+export default Home;
