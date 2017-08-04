@@ -1,6 +1,11 @@
 var router = require('express').Router();
 
-router.get('/messages', (req, res) => {
+const passport = require('passport');
+
+router.get('/messages', passport.authenticate('local-signup', {
+  successRedirect: '/login',
+  failureRedirect: '/signup'
+}), (req, res) => {
   res.end();
 });
 
