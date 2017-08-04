@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import Home from './components/Home.jsx';
-import Login from './components/Login.jsx';
-import Signup from './components/Signup.jsx';
-import Messages from './components/Messages.jsx';
-import NotFound from './components/NotFound.jsx';
+import Home from './components/Pages/Home.jsx';
+import Login from './components/Pages/Login.jsx';
+import Signup from './components/Pages/Signup.jsx';
+import Messages from './components/Pages/Messages.jsx';
+import NotFound from './components/Pages/NotFound.jsx';
 import './styles.css';
 import { Router, Route, browserHistory, IndexRoute } from 'react-router';
 
