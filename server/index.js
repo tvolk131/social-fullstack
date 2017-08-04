@@ -6,9 +6,13 @@ const db = require('../database');
 const url = require('url');
 const env = require('dotenv').load();
 const path = require('path');
+const apiRouter = require('./apiRouter.js');
 
 // Get models
 var models = require('../database/models/index.js');
+
+// Initialize passport strategy
+require('../config/passport.js')(passport, models.users);
 
 // Sync database
 models.sequelize.sync().then(() => {
@@ -35,8 +39,10 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session()); // Persistent login sessions
 
+
+app.use('/api', apiRouter);
+
 // Serve static files
-// app.use(express.static(__dirname + '/../client/dist'));
 app.get('/bundle.js', (req, res) => {
   res.sendFile(path.resolve(__dirname + '/../client/dist/bundle.js'));
 });
