@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 
 class Search extends React.Component {
   constructor(props) {
@@ -7,7 +8,7 @@ class Search extends React.Component {
       term: ''
     }
     this.onChange = this.onChange.bind(this);
-    this.search = this.search.bind(this);
+    this.sendUserData = this.sendUserData.bind(this);
   }
 
   onChange (e) {
@@ -16,12 +17,31 @@ class Search extends React.Component {
     });
   }
 
-  search() {
-    this.props.onSearch(this.state.term);
+  sendUserData () {
+    axios.post('/signup', {
+      firstname: 'Tommy',
+      lastname: 'Volk',
+      email: 'tvolk131@gmail.com',
+      password: 'test'
+    })
+    .then((res) => {
+      window.location.replace(res.request.responseURL); // Performs redirect to proper page
+      return res;
+    });
   }
 
   render() {
-    return (<div>SIGNUP</div>) 
+    return (
+      <div>
+        <h1>SIGNUP</h1>
+        <form method='POST'>
+          Email:<br/><input type='text' /><br/>
+          Password:<br/><input type='password' /><br/>
+          <input type='submit' />
+        </form>
+        <button onClick={this.sendUserData}>SEND</button>
+      </div>
+    ) 
   }
 }
 
