@@ -4,6 +4,7 @@ import axios from 'axios';
 import Home from './components/Home.jsx';
 import Login from './components/Login.jsx';
 import Signup from './components/Signup.jsx';
+import Messages from './components/Messages.jsx';
 import NotFound from './components/NotFound.jsx';
 import './styles.css';
 import { Router, Route, browserHistory, IndexRoute } from 'react-router';
@@ -13,6 +14,7 @@ ReactDOM.render(
   <Route path='/' component={Home}/>
   <Route path='/login' component={Login}/>
   <Route path='/signup' component={Signup}/>
+  <Route path='/messages' component={Messages}/>
   <Route path='*' component={NotFound}/>
 </Router>
 , document.getElementById('app'));

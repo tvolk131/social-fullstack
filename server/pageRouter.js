@@ -28,4 +28,6 @@ router.get('/logout', (req, res) => {
   });
 });
 
+router.get('/messages', isLoggedIn);
+
 module.exports = router;
