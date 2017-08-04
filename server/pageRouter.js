@@ -12,7 +12,7 @@ var isLoggedIn = (req, res, next) => {
 
 router.get('/', isLoggedIn);
 
-router.post('/login', passport.authenticate('local-signup', {
+router.post('/login', passport.authenticate('local-signin', {
   successRedirect: '/',
   failureRedirect: '/login'
 }));
