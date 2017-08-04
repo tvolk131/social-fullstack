@@ -5,6 +5,7 @@ const session = require('express-session');
 const db = require('../database');
 const url = require('url');
 const env = require('dotenv').load();
+const path = require('path');
 
 // Get models
 var models = require('../database/models/index.js');
@@ -35,7 +36,14 @@ app.use(passport.initialize());
 app.use(passport.session()); // Persistent login sessions
 
 // Serve static files
-app.use(express.static(__dirname + '/../client/dist'));
+// app.use(express.static(__dirname + '/../client/dist'));
+app.get('/bundle.js', (req, res) => {
+  res.sendFile(path.resolve(__dirname + '/../client/dist/bundle.js'));
+});
+
+app.get('/*', (req, res) => {
+  res.sendFile(path.resolve(__dirname + '/../client/dist/index.html'));
+});
 
 
 app.post('/repos', (req, res) => {
