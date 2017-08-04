@@ -6,6 +6,7 @@ router.get('/messages', passport.authenticate('local-signup', {
   successRedirect: '/login',
   failureRedirect: '/signup'
 }), (req, res) => {
+  console.log('USER: ' + res.user);
   res.end();
 });
 

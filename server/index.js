@@ -7,6 +7,8 @@ const url = require('url');
 const env = require('dotenv').load();
 const path = require('path');
 const apiRouter = require('./apiRouter.js');
+const cookieParser = require('cookie-parser');
+const pageRouter = require('./pageRouter.js');
 
 // Get models
 var models = require('../database/models/index.js');
@@ -30,6 +32,9 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
+// Cookie parser
+app.use(cookieParser());
+
 // Setup passport and sessions
 app.use(session({
   secret: 'thisisasecret',
@@ -41,6 +46,7 @@ app.use(passport.session()); // Persistent login sessions
 
 
 app.use('/api', apiRouter);
+app.use('/', pageRouter); // Middleware redirector
 
 // Serve static files
 app.get('/bundle.js', (req, res) => {
