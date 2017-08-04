@@ -2,7 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 import Search from './components/Search.jsx';
+import Test from './components/Test.jsx';
 import './styles.css';
+import { Router, Route, browserHistory, IndexRoute } from 'react-router';
 
 class App extends React.Component {
   constructor(props) {
@@ -12,11 +14,18 @@ class App extends React.Component {
   }
 
   render () {
-    return (<div>
-      <h1>Social App</h1>
-      <link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Mono" rel="stylesheet"></link>
-    </div>)
+    return (
+      <div>
+        <p>Test</p>
+        <link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Mono" rel="stylesheet"></link>
+      </div>)
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('app'));
+ReactDOM.render(
+<Router history={browserHistory}>
+  <Route path='/' component={App}/>
+  <Route path='/test' component={Test}/>
+  <Route path='/testTestTEST' component={Search}/>
+</Router>
+, document.getElementById('app'));
