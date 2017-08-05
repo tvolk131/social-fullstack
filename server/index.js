@@ -9,6 +9,9 @@ const path = require('path');
 const apiRouter = require('./apiRouter.js');
 const cookieParser = require('cookie-parser');
 const pageRouter = require('./pageRouter.js');
+const sessionstore = require('sessionstore');
+const passportSocketIo = require('passport.socketio');
+var sessionStore = sessionstore.createSessionStore();
 
 // Get models
 var models = require('../database/models/index.js');
@@ -38,6 +41,7 @@ app.use(cookieParser());
 
 // Setup passport and sessions
 app.use(session({
+  store: sessionStore,
   secret: 'thisisasecret',
   resave: true,
   saveUninitialized: true
@@ -76,9 +80,19 @@ http.listen(port, () => {
   console.log('Listening on port ' + port);
 });
 
+io.use(passportSocketIo.authorize({
+  key: 'connect.sid',
+  secret: 'thisisasecret',
+  store: sessionStore,
+  passport: passport,
+  cookieParser: cookieParser
+}));
+
 io.on('connection', (socket) => {
   console.log('A user has connected');
-  socket.cookie = socket.handshake.headers.cookie;
+  if (socket.request.user) {
+    console.log(socket.request.user);
+  }
   socket.on('disconnect', () => {
     console.log('A user has disconnected');
   })
