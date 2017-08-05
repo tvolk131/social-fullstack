@@ -12,7 +12,6 @@ class Messages extends React.Component {
       messages: []
     };
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.fetchMessagesWithUser('tvolk131@gmail.com');
   }
 
   handleInputChange (property, e) {
