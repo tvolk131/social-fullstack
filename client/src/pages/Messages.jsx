@@ -11,6 +11,9 @@ class Messages extends React.Component {
   fetchMessages(username) {
     return axios.get('/api/messages?user=' + username);
   }
+  sendMessage(username, text) {
+    return axios.post('/api/messages', {username, text}).then(console.log);
+  }
 
   render() {
     return (

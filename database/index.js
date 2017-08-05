@@ -39,7 +39,7 @@ getUserId = (username) => {
     });
 };
 
-module.exports.addMessage = (senderUsername, recipientUsername, text) => {
+module.exports.saveMessage = (senderUsername, recipientUsername, text) => {
     var senderId;
     var receiverId;
 

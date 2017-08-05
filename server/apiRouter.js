@@ -17,6 +17,12 @@ router.get('/messages', isLoggedIn, (req, res) => {
   db.getMessages(user, otherUser).then(JSON.stringify).then(res.end);
 });
 
+router.post('/messages', isLoggedIn, (req, res) => {
+  var user = req.user.email;
+  console.log(req.body);
+  db.saveMessage(user, req.body.username, req.body.text).then(res.end('Message send!'));
+});
+
 router.get('/currentuser', (req, res) => {
   console.log(JSON.stringify(req.user));
   var userData = {
