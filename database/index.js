@@ -56,6 +56,8 @@ getUserId = (username) => {
         }
     }).then((user) => {
         return user.id;
+    }).catch((err) => {
+        return -1;
     });
 };
 getUser = (userId) => {
@@ -82,5 +84,7 @@ module.exports.saveMessage = (senderUsername, recipientUsername, text) => {
             sender_id: userIds.senderId,
             recipient_id: userIds.receiverId
         });
+    }).catch((err) => {
+        //Do nothing
     });
 };
