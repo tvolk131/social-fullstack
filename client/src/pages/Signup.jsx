@@ -72,7 +72,7 @@ class Signup extends React.Component {
           <button onClick={this.sendUserData}>Create Account</button>
         </div>
         <div>
-          <p>Already have an account? <a href='/login'>sign in</a></p>
+          <p>Already have an account? <a href='/login'>Sign in!</a></p>
         </div>
       </div>
     ) 

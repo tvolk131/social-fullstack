@@ -59,6 +59,9 @@ class Login extends React.Component {
           Password:<br/><input type='password' value={this.state.password} onChange={this.handleInputChange.bind(this, 'password')} /><br/>
           <button onClick={this.sendLoginRequest}>Login</button>
         </div>
+        <div>
+          <p>No account? <a href='/login'>Sign up!</a></p>
+        </div>
       </div>
     ) 
   }
