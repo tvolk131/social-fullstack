@@ -77,13 +77,9 @@ module.exports.saveMessage = (senderUsername, recipientUsername, text) => {
         return getUserId(recipientUsername);
     }).then((userId) => {
         receiverId = userId;
-        return {senderId, receiverId};
-    }).then((userIds) => {
-        return models.messages.create({
-            text: text,
-            sender_id: userIds.senderId,
-            recipient_id: userIds.receiverId
-        });
+        return {sender_id: senderId, recipient_id: receiverId, text: text};
+    }).then((messageData) => {
+        return models.messages.create(messageData);
     }).catch((err) => {
         //Do nothing
     });
