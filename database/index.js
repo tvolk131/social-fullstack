@@ -80,6 +80,11 @@ module.exports.saveMessage = (senderUsername, recipientUsername, text) => {
         return {sender_id: senderId, recipient_id: receiverId, text: text};
     }).then((messageData) => {
         return models.messages.create(messageData);
+    }).then((message) => {
+        var newMessage = JSON.parse(JSON.stringify(message))
+        newMessage.sender = senderUsername;
+        newMessage.recipient = recipientUsername;
+        return newMessage;
     }).catch((err) => {
         //Do nothing
     });
