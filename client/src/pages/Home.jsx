@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import Navbar from '../components/Navbar.jsx';
 
 class Home extends React.Component {
   constructor(props) {
@@ -20,6 +21,7 @@ class Home extends React.Component {
   render() {
     return (
       <div>
+        <Navbar/>
         <div>HOMEPAGE</div>
         <div>User: {this.state.user.firstname} {this.state.user.lastname}</div>
       </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import Navbar from '../components/Navbar.jsx';
 
 class Messages extends React.Component {
   constructor(props) {
@@ -9,6 +10,7 @@ class Messages extends React.Component {
   render() {
     return (
       <div>
+        <Navbar/>
         <div>Messages</div>
       </div>
     ) 
