@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import Navbar from '../components/Navbar.jsx';
 import Message from '../components/Message.jsx';
+import io from 'socket.io-client';
 
 class Messages extends React.Component {
   constructor(props) {
@@ -14,7 +15,8 @@ class Messages extends React.Component {
       messages: []
     };
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.fetchMessages(); // Loads messages on initial load or redirect from messages with anothe user
+    this.fetchMessages(); // Loads messages on initial load or redirect from messages with another user
+    this.socket = io();
   }
 
   handleInputChange (property, e) {

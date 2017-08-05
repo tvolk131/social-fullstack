@@ -70,6 +70,15 @@ app.get('/repos', (req, res) => {
 
 let port = process.env.PORT || 8080;
 
-app.listen(port, () => {
-  console.log(`listening on port ${port}`);
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+http.listen(port, () => {
+  console.log('Listening on port ' + port);
+});
+
+io.on('connection', (socket) => {
+  console.log('A user has connected');
+  socket.on('disconnect', () => {
+    console.log('A user has disconnected');
+  })
 });
