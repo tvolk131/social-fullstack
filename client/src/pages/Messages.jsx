@@ -7,6 +7,11 @@ class Messages extends React.Component {
     super(props);
   }
 
+  // Fetches the messages between you and the other person
+  fetchMessages(username) {
+    return axios.get('/api/messages?user=' + username);
+  }
+
   render() {
     return (
       <div>

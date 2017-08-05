@@ -1,13 +1,20 @@
 var router = require('express').Router();
+var db = require('../database');
 
 const passport = require('passport');
 
-router.get('/messages', passport.authenticate('local-signup', {
-  successRedirect: '/login',
-  failureRedirect: '/signup'
-}), (req, res) => {
-  console.log('USER: ' + res.user);
-  res.end();
+var isLoggedIn = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return next();
+  } else {
+    res.redirect('/login');
+  }
+};
+
+router.get('/messages', isLoggedIn, (req, res) => {
+  var user = req.user.email;
+  var otherUser = req.query.user;
+  db.getMessages(user, otherUser).then(JSON.stringify).then(res.end);
 });
 
 router.get('/currentuser', (req, res) => {
