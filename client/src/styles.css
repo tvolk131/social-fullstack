@@ -24,6 +24,13 @@ body {
     overflow: hidden;
 }
 
+.message-list {
+    padding: 20px;
+}
+.message {
+    padding: 10px;
+}
+
 a {
     text-decoration: none;
 }

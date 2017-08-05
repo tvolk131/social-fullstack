@@ -25,6 +25,7 @@ class Messages extends React.Component {
       return data.data;
     })
     .then((messages) => {
+      console.log(messages);
       setMessages(messages);
     });
   }
@@ -37,9 +38,11 @@ class Messages extends React.Component {
       <div>
         <Navbar/>
         <div>Messages</div>
-        {this.state.messages.map((message, index) => {
-          return <Message user={message.sender} text={message.text} key={index} />
-        })}
+        <div className='message-list'>
+          {this.state.messages.map((message, index) => {
+            return <Message user={message.sender} text={message.text} timestamp={message.createdAt} key={index} />
+          })}
+        </div>
       </div>
     ) 
   }
