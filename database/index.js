@@ -26,6 +26,21 @@ module.exports.getMessages = (senderUsername, recipientUsername) => {
                 ]
             }
         });
+    }).then((messageArray) => {
+        var newMessageArray = JSON.parse(JSON.stringify(messageArray));
+        for (var i = 0; i < newMessageArray.length; i++) {
+            if (newMessageArray[i].sender_id === senderId) {
+                newMessageArray[i].sender = senderUsername;
+                newMessageArray[i].recipient = recipientUsername;
+            } else if (newMessageArray[i].sender_id === receiverId) {
+                newMessageArray[i].sender = recipientUsername;
+                newMessageArray[i].recipient = senderUsername;
+            } else {
+                newMessageArray[i].sender = 'Dang';
+                newMessageArray[i].recipient = 'Dang';
+            }
+        }
+        return newMessageArray;
     });
 };
 
