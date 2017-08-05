@@ -11,7 +11,14 @@ class Messages extends React.Component {
       pendingMessage: '',
       messages: []
     };
+    this.handleInputChange = this.handleInputChange.bind(this);
     this.fetchMessagesWithUser('tvolk131@gmail.com');
+  }
+
+  handleInputChange (property, e) {
+    var stateChange = {};
+    stateChange[property] = e.target.value;
+    this.setState(stateChange);
   }
 
   // Fetches the messages between you and the other person
@@ -43,6 +50,10 @@ class Messages extends React.Component {
             return <Message user={message.sender} text={message.text} timestamp={message.createdAt} key={index} />
           })}
         </div>
+        <input type='text' value={this.state.pendingMessage} onChange={this.handleInputChange.bind(this, 'pendingMessage')} /><br/>
+        <button onClick={this.sendMessage.bind(this, this.state.senderName, this.state.pendingMessage)}>Send</button><br/>
+        <input type='text' value={this.state.senderName} onChange={this.handleInputChange.bind(this, 'senderName')} /><br/>
+        <button onClick={this.fetchMessagesWithUser.bind(this, this.state.senderName)}>Fetch Messages</button><br/>
       </div>
     ) 
   }
