@@ -78,6 +78,7 @@ http.listen(port, () => {
 
 io.on('connection', (socket) => {
   console.log('A user has connected');
+  socket.cookie = socket.handshake.headers.cookie;
   socket.on('disconnect', () => {
     console.log('A user has disconnected');
   })
