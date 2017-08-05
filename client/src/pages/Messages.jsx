@@ -19,6 +19,8 @@ class Messages extends React.Component {
     this.socket = io();
     this.socket.on('message', (message) => {
       console.log(message);
+      this.state.messages.push(JSON.parse(message));
+      this.forceUpdate();
     });
   }
 
@@ -56,6 +58,7 @@ class Messages extends React.Component {
   sendMessage(username, text) {
     console.log(username);
     return axios.post('/api/messages', {username, text}).then(console.log);
+    // this.socket.emit('message', JSON.stringify({username, text}));
   }
 
   render() {
