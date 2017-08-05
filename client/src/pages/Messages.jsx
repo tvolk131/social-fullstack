@@ -17,6 +17,9 @@ class Messages extends React.Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.fetchMessages(); // Loads messages on initial load or redirect from messages with another user
     this.socket = io();
+    this.socket.on('message', (message) => {
+      console.log(message);
+    });
   }
 
   handleInputChange (property, e) {

@@ -49,8 +49,9 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session()); // Persistent login sessions
 
+var sockets = {};
 
-app.use('/api', apiRouter);
+app.use('/api', apiRouter(sockets));
 app.use('/', pageRouter); // Middleware redirector
 
 // Serve static files
@@ -88,12 +89,16 @@ io.use(passportSocketIo.authorize({
   cookieParser: cookieParser
 }));
 
+// TODO - Allow for any user to have multiple open sockets
 io.on('connection', (socket) => {
   console.log('A user has connected');
-  if (socket.request.user) {
-    console.log(socket.request.user);
+  if (socket.request.user.id) {
+    sockets[socket.request.user.email] = socket;
   }
   socket.on('disconnect', () => {
     console.log('A user has disconnected');
+    if (socket.request.user.id) {
+      delete sockets[socket.request.user.id];
+    }
   })
 });
