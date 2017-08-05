@@ -36,8 +36,7 @@ module.exports.getMessages = (senderUsername, recipientUsername) => {
                 newMessageArray[i].sender = recipientUsername;
                 newMessageArray[i].recipient = senderUsername;
             } else {
-                newMessageArray[i].sender = 'Dang';
-                newMessageArray[i].recipient = 'Dang';
+                throw 'ERROR!!!';
             }
         }
         return newMessageArray;
@@ -51,6 +50,13 @@ getUserId = (username) => {
         }
     }).then((user) => {
         return user.id;
+    });
+};
+getUser = (userId) => {
+    return models.users.findOne({
+        where: {
+            id: userId
+        }
     });
 };
 
