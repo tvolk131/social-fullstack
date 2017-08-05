@@ -7,8 +7,12 @@ class Navbar extends React.Component {
 
   render() {
     return (
-      <div>
-        <div>This is the navbar</div>
+      <div className='navbar'>
+        <div className='content-wrap'>
+          <a href='/'>Home</a>
+          <a href='/messages'>Messages</a>
+          <a href='/logout'>Logout</a>
+        </div>
       </div>
     ) 
   }

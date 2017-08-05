@@ -1,3 +1,29 @@
 body {
     font-family: 'Roboto', sans-serif;
 }
+
+.navbar {
+    text-align: center;
+    overflow: visible;
+}
+.navbar a{
+    color: #2B2D42;
+    font-size: 20px;
+    padding: 20px 30px;
+    font-weight: 400;
+}
+.navbar a:hover{
+    background: #8D99AE;
+    text-decoration: none;
+}
+
+.content-wrap {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 10px;
+    overflow: hidden;
+}
+
+a {
+    text-decoration: none;
+}
