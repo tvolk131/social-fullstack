@@ -1,4 +1,4 @@
-parseTime = function(timeString, relativeTime) {
+module.exports.parse = (timeString, relativeTime) => {
 var date = new Date(timeString);
 
 if (relativeTime) {
@@ -98,5 +98,3 @@ timeString += date.getMinutes() + ' ' + amORpm;
 
 return dateString + ' ' + timeString;
 };
-
-module.exports.parse = parseTime;
