@@ -60,7 +60,7 @@ class Login extends React.Component {
           <button onClick={this.sendLoginRequest}>Login</button>
         </div>
         <div>
-          <p>No account? <a href='/login'>Sign up!</a></p>
+          <p>No account? <a href='/signup'>Sign up!</a></p>
         </div>
       </div>
     ) 
