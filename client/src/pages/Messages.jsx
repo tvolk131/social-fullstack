@@ -6,8 +6,10 @@ import Message from '../components/Message.jsx';
 class Messages extends React.Component {
   constructor(props) {
     super(props);
+    var urlParams = new URLSearchParams(window.location.search);
     this.state = {
-      senderName: '',
+      otherUserName: urlParams.get('user'),
+      newOtherUserName: '',
       pendingMessage: '',
       messages: []
     };
@@ -47,6 +49,7 @@ class Messages extends React.Component {
   }
 
   sendMessage(username, text) {
+    console.log(username);
     return axios.post('/api/messages', {username, text}).then(console.log);
   }
 
@@ -55,15 +58,15 @@ class Messages extends React.Component {
       <div>
         <Navbar/>
         <div>Messages</div>
-        <input type='text' value={this.state.senderName} onChange={this.handleInputChange.bind(this, 'senderName')} /><br/>
-        <button onClick={this.changeUserSelected.bind(this, this.state.senderName)}>Fetch Messages</button><br/>
+        <input type='text' value={this.state.newOtherUserName} onChange={this.handleInputChange.bind(this, 'newOtherUserName')} /><br/>
+        <button onClick={this.changeUserSelected.bind(this, this.state.newOtherUserName)}>Fetch Messages</button><br/>
         <div className='message-list'>
           {this.state.messages.map((message, index) => {
             return <Message user={message.sender} text={message.text} timestamp={message.createdAt} key={index} />
           })}
         </div>
         <input type='text' value={this.state.pendingMessage} onChange={this.handleInputChange.bind(this, 'pendingMessage')} /><br/>
-        <button onClick={this.sendMessage.bind(this, this.state.senderName, this.state.pendingMessage)}>Send</button><br/>
+        <button onClick={this.sendMessage.bind(this, this.state.otherUserName, this.state.pendingMessage)}>Send</button><br/>
       </div>
     ) 
   }
