@@ -11,21 +11,27 @@ module.exports.getMessages = (senderUsername, recipientUsername) => {
     }).then((userId) => {
         receiverId = userId;
         return {senderId, receiverId};
+    }).catch((err) => {
+        return {senderId: -1, receiverId: -1};
     }).then((userIds) => {
-        return models.messages.findAll({
-            where: {
-                $or: [
-                    {
-                        sender_id: userIds.senderId,
-                        recipient_id: userIds.receiverId
-                    },
-                    {
-                        sender_id: userIds.receiverId,
-                        recipient_id: userIds.senderId
-                    }
-                ]
-            }
-        });
+        if (userIds.senderId === -1 || userIds.receiverId === -1) {
+            return [];
+        } else {
+            return models.messages.findAll({
+                where: {
+                    $or: [
+                        {
+                            sender_id: userIds.senderId,
+                            recipient_id: userIds.receiverId
+                        },
+                        {
+                            sender_id: userIds.receiverId,
+                            recipient_id: userIds.senderId
+                        }
+                    ]
+                }
+            });
+        }
     }).then((messageArray) => {
         var newMessageArray = JSON.parse(JSON.stringify(messageArray));
         for (var i = 0; i < newMessageArray.length; i++) {
