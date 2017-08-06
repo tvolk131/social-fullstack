@@ -43,6 +43,22 @@ var Users = sequelize.define('users', {
 });
 db.users = Users;
 
+// FRIENDS SCHEMA
+var Friends = sequelize.define('friends', {
+    id: {
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER
+    }
+});
+Friends.belongsTo(Users, {
+    foreignKey: 'friender_id'
+});
+Friends.belongsTo(Users, {
+    foreignKey: 'friendee_id'
+});
+db.friends = Friends;
+
 // MESSAGES SCHEMA
 var Messages = sequelize.define('messages', {
     id: {
