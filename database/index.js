@@ -118,6 +118,52 @@ module.exports.getFriendData = (userId) => {
             }
         }
         return {friends, friendRequestsSent, friendRequestsReceived};
+    }).then((friendDataOld) => {
+        var friendData = JSON.parse(JSON.stringify(friendDataOld));
+
+        var getUserPromises = [];
+        for (var i = 0; i < friendData.friends.length; i++) {
+            delete friendData.friends[i].friender_accepted;
+            delete friendData.friends[i].friendee_accepted;
+            getUserPromises.push(
+                models.users.findOne({
+                    where: {
+                        id: userId === friendData.friends[i].friender_id ? friendData.friends[i].friendee_id : friendData.friends[i].friender_id
+                    }
+                }).then((user) => {
+                    friendData.friends[i].friend = user;
+                })
+            );
+        }
+        for (var i = 0; i < friendData.friendRequestsSent.length; i++) {
+            delete friendData.friendRequestsSent[i].friender_accepted;
+            delete friendData.friendRequestsSent[i].friendee_accepted;
+            getUserPromises.push(
+                models.users.findOne({
+                    where: {
+                        id: userId === friendData.friendRequestsSent[i].friender_id ? friendData.friendRequestsSent[i].friendee_id : friendData.friendRequestsSent[i].friender_id
+                    }
+                }).then((user) => {
+                    friendData.friendRequestsSent[i].friend = user;
+                })
+            );
+        }
+        for (var i = 0; i < friendData.friendRequestsReceived.length; i++) {
+            delete friendData.friendRequestsReceived[i].friender_accepted;
+            delete friendData.friendRequestsReceived[i].friendee_accepted;
+            getUserPromises.push(
+                models.users.findOne({
+                    where: {
+                        id: userId === friendData.friendRequestsReceived[i].friender_id ? friendData.friendRequestsReceived[i].friendee_id : friendData.friendRequestsReceived[i].friender_id
+                    }
+                }).then((user) => {
+                    friendData.friendRequestsReceived[i].friend = user;
+                })
+            );
+        }
+        return Promise.all(getUserPromises).then(() => {
+            return friendData;
+        });
     });
 };
 
