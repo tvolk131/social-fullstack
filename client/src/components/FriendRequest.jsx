@@ -8,7 +8,7 @@ class FriendRequest extends React.Component {
   render () {
     return (
       <div className='friend-request'>
-        <div>{this.props.request.user}</div>
+        <div>{this.props.user.email}</div>
         <button>Accept</button>
         <button>Decline</button>
       </div>

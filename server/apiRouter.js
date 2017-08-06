@@ -49,7 +49,6 @@ module.exports = (sockets) => {
   });
 
   router.get('/currentuser', (req, res) => {
-    console.log(JSON.stringify(req.user));
     var userData = {
       firstname: req.user.firstname,
       lastname: req.user.lastname,
@@ -57,6 +56,13 @@ module.exports = (sockets) => {
       createdAt: req.user.createdAt
     };
     res.send(JSON.stringify(userData));
+  });
+
+  router.get('/frienddata', (req, res) => {
+    db.getFriendData(req.user.id).then(JSON.stringify).then((data) => {
+      console.log(JSON.parse(data));
+      res.end(data);
+    });
   });
 
   router.get('/*', (req, res) => {

@@ -8,10 +8,22 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: {}
+      user: {},
+      friendData: {friends: [], friendRequestsSent: [], friendRequestsReceived: []}
     }
     this.getData();
     this.socket = io();
+
+
+
+    axios.get('/api/frienddata').then((data) => {
+      this.setState({friendData: data.data});
+    });
+    // this.socket.on('friend request', (requestString) => {
+    //   var request = JSON.parse(requestString);
+    //   this.state.requests.push(request);
+    //   this.forceUpdate();
+    // });
   }
 
   getData () {
@@ -26,7 +38,7 @@ class Home extends React.Component {
       <div>
         <Navbar/>
         <div>Welcome, {this.state.user.firstname}</div>
-        <FriendRequestList socket={this.socket} />
+        <FriendRequestList requests={this.state.friendData.friendRequestsReceived} socket={this.socket} />
       </div>
     ) 
   }
