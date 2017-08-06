@@ -10,7 +10,9 @@ class Home extends React.Component {
     super(props);
     this.state = {
       user: {},
-      friendData: {friends: [], friendRequestsSent: [], friendRequestsReceived: []}
+      friends: [],
+      friendRequestsSent: [],
+      friendRequestsReceived: []
     }
     this.getData();
     this.socket = io();
@@ -18,7 +20,10 @@ class Home extends React.Component {
 
 
     axios.get('/api/frienddata').then((data) => {
-      this.setState({friendData: data.data});
+      this.setState({friends: data.data.friends});
+      this.setState({friendRequestsSent: data.data.friendRequestsSent});
+      this.setState({friendRequestsReceived: data.data.friendRequestsReceived});
+      this.forceUpdate();
     });
     // this.socket.on('friend request', (requestString) => {
     //   var request = JSON.parse(requestString);
@@ -39,7 +44,7 @@ class Home extends React.Component {
       <div>
         <Navbar/>
         <div>Welcome, {this.state.user.firstname}</div>
-        <FriendRequestList requests={this.state.friendData.friendRequestsReceived} socket={this.socket} />
+        <FriendRequestList requests={this.state.friendRequestsReceived} forceUpdate={this.forceUpdate.bind(this)} />
         <FrienderPanel />
       </div>
     ) 
