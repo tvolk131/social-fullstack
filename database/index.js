@@ -120,7 +120,54 @@ module.exports.addFriend = (frienderUserId, friendeeUserId) => {
 // -------------------------------------------------------------------------------------------
 // This is done all in one method because all friend data is searched through anyway, so if
 // more than one data set is needed then only one search is performed
-module.exports.getFriendData = (username) => {
+module.exports.getFriendData = (userId) => {
+    return models.friends.findAll({
+        where: {
+            $or: [
+                {
+                    friender_id: userId
+                },
+                {
+                    friendee_id: userId
+                }
+            ]
+        }
+    }).then((data) => {
+        var friendLinks = [];
+        for (var i = 0; i < data.length; i++) {
+            friendLinks.push(data[i].dataValues);
+        }
+        return friendLinks;
+    }).then((friendLinks) => {
+        var friendRequestsSent = {}; // Will contain user IDs of all people that have been friended
+        var friendRequestsReceived = {}; // Will contain user IDs of all people that friended user
+        for (var i = 0; i < friendLinks.length; i++) {
+            if (friendLinks[i].friender_id === userId) {
+                friendRequestsSent[friendLinks[i].friendee_id] = true;
+            } else {
+                friendRequestsReceived[friendLinks[i].friender_id] = true;
+            }
+        }
+        var friends = [];
+        for (var key in friendRequestsSent) {
+            if (friendRequestsReceived[key]) {
+                delete friendRequestsSent[key];
+                delete friendRequestsReceived[key];
+                friends.push(key);
+            }
+        }
+        var friendRequestsSentArray = [];
+        var friendRequestsReceivedArray = [];
+        for (var key in friendRequestsSent) {
+            friendRequestsSentArray.push(key);
+        }
+        for (var key in friendRequestsReceived) {
+            friendRequestsReceivedArray.push(key);
+        }
+        friendRequestsSent = friendRequestsSentArray;
+        friendRequestsReceived = friendRequestsReceivedArray;
+        return {friendRequestsSent, friendRequestsReceived, friends};
+    });
 };
 
 module.exports.createPost = (username, text) => {
