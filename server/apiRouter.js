@@ -65,6 +65,31 @@ module.exports = (sockets) => {
     });
   });
 
+  // Expects another user's email in req.body.userEmail
+  // and then adds a friend request with that particular user
+  router.post('/addfriend', (req, res) => {
+    var frienderId = req.user.id;
+    var friendeeId;
+    console.log(req.body.userEmail);
+    db.getUser({email: req.body.userEmail}).then((user) => {
+      friendeeId = user.id;
+    }).catch((err) => {
+      res.end('The email you entered is not linked to an existing user');
+    }).then(() => {
+      return db.addFriend(frienderId, friendeeId);
+    }).then(() => {
+      res.end('Friend request sent');
+    });
+  });
+
+  router.post('/acceptfriendrequest', (req, res) => {
+    var frienderId = req.user.id;
+    var friendeeId = req.body.friendId;
+    db.addFriend(frienderId, friendeeId).then(() => {
+      res.end('Friend request accepted');
+    });
+  });
+
   router.get('/*', (req, res) => {
     res.end();
   });

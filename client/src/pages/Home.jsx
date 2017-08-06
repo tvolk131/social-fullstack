@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import Navbar from '../components/Navbar.jsx';
 import FriendRequestList from '../components/FriendRequestList.jsx';
+import FrienderPanel from '../components/FrienderPanel.jsx';
 import io from 'socket.io-client';
 
 class Home extends React.Component {
@@ -39,6 +40,7 @@ class Home extends React.Component {
         <Navbar/>
         <div>Welcome, {this.state.user.firstname}</div>
         <FriendRequestList requests={this.state.friendData.friendRequestsReceived} socket={this.socket} />
+        <FrienderPanel />
       </div>
     ) 
   }
