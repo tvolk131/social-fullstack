@@ -90,6 +90,15 @@ module.exports.saveMessage = (senderUsername, recipientUsername, text) => {
     });
 };
 
+// Adds a user-to-user friend relationship, automatically
+// disallowing duplicate duplicate entries
+// ------------------------------------------------------
+// Node: This user-to-user relationship is one-way
+// A friendship is only formed when both users are
+// friended to each other, otherwise it is considered
+// a one-way request
+//
+// IE. a friendship is essentially a two-way friend request
 module.exports.addFriend = (frienderUserId, friendeeUserId) => {
     if (frienderUserId != friendeeUserId) {
         models.friends.findAll({
