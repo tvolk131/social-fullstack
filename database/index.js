@@ -30,26 +30,52 @@ module.exports.addMessage = (senderId, recipientId, text) => {
 
 // Adds a user-to-user friend relationship, automatically
 // disallowing duplicate duplicate entries
-// ------------------------------------------------------
-// Node: This user-to-user relationship is one-way
-// A friendship is only formed when both users are
-// friended to each other, otherwise it is considered
-// a one-way request
-//
-// IE. a friendship is essentially a two-way friend request
 module.exports.addFriend = (frienderUserId, friendeeUserId) => {
     if (frienderUserId != friendeeUserId) {
-        models.friends.findAll({
+        return models.friends.findAll({
             where: {
-                friender_id: frienderUserId,
-                friendee_id: friendeeUserId
+                $or: [
+                    {
+                        friender_id: frienderUserId,
+                        friendee_id: friendeeUserId
+                    },
+                    {
+                        friender_id: friendeeUserId,
+                        friendee_id: frienderUserId
+                    }
+                ]
             }
         }).then((data) => {
-            return data.length === 0;
-        }).then((isUnique) => {
-            if (isUnique) {
-                return models.friends.create({friender_id: frienderUserId, friendee_id: friendeeUserId});
+            if (data.length === 0) {
+                return models.friends.create({
+                    friender_id: frienderUserId,
+                    friendee_id: friendeeUserId,
+                    friender_accepted: true,
+                    friendee_accepted: false
+                });
+            } else if (data.length === 1) {
+                var friendeeHasAccepted = data[0].dataValues.friendee_accepted;
+                if (!friendeeHasAccepted) {
+                    models.friends.update({
+                        friender_accepted: true,
+                        friendee_accepted: true
+                    }, {
+                        where: {
+                            $or: [
+                                {
+                                    friender_id: frienderUserId,
+                                    friendee_id: friendeeUserId
+                                },
+                                {
+                                    friender_id: friendeeUserId,
+                                    friendee_id: frienderUserId
+                                }
+                            ]
+                        }
+                    });
+                }
             }
+            console.log(data);
         });
     }
 };
@@ -77,34 +103,21 @@ module.exports.getFriendData = (userId) => {
         }
         return friendLinks;
     }).then((friendLinks) => {
-        var friendRequestsSent = {}; // Will contain user IDs of all people that have been friended
-        var friendRequestsReceived = {}; // Will contain user IDs of all people that friended user
-        for (var i = 0; i < friendLinks.length; i++) {
-            if (friendLinks[i].friender_id === userId) {
-                friendRequestsSent[friendLinks[i].friendee_id] = true;
-            } else {
-                friendRequestsReceived[friendLinks[i].friender_id] = true;
-            }
-        }
         var friends = [];
-        for (var key in friendRequestsSent) {
-            if (friendRequestsReceived[key]) {
-                delete friendRequestsSent[key];
-                delete friendRequestsReceived[key];
-                friends.push(key);
+        var friendRequestsSent = [];
+        var friendRequestsReceived = [];
+        for (var i = 0; i < friendLinks.length; i++) {
+            if (friendLinks[i].friender_accepted || friendLinks[i].friendee_accepted) {
+                if (!friendLinks[i].friender_accepted) {
+                    friendRequestsReceived.push(friendLinks[i]);
+                } else if (!friendLinks[i].friendee_accepted) {
+                    friendRequestsSent.push(friendLinks[i]);
+                } else {
+                    friends.push(friendLinks[i]);
+                }
             }
         }
-        var friendRequestsSentArray = [];
-        var friendRequestsReceivedArray = [];
-        for (var key in friendRequestsSent) {
-            friendRequestsSentArray.push(key);
-        }
-        for (var key in friendRequestsReceived) {
-            friendRequestsReceivedArray.push(key);
-        }
-        friendRequestsSent = friendRequestsSentArray;
-        friendRequestsReceived = friendRequestsReceivedArray;
-        return {friendRequestsSent, friendRequestsReceived, friends};
+        return {friends, friendRequestsSent, friendRequestsReceived};
     });
 };
 
