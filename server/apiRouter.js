@@ -13,9 +13,39 @@ module.exports = (sockets) => {
   };
 
   router.get('/messages', isLoggedIn, (req, res) => {
-    var user = req.user.email;
-    var otherUser = req.query.user;
-    db.getMessages(user, otherUser).then(JSON.stringify).then(res.end);
+    var userId = req.user.id;
+    var otherUserId;
+    var userEmail;
+    var otherUserEmail;
+    db.getUser({email: req.query.user})
+    .then((user) => {
+      otherUserId = user.id;
+      otherUserEmail = user.email;
+    })
+    .then(() => {
+      return db.getUser({id: userId});
+    })
+    .then((user) => {
+      userEmail = user.email;
+    })
+    .then(() => {
+      return db.getMessages(userId, otherUserId);
+    })
+    .then((messagesOld) => {
+      var messages = JSON.parse(JSON.stringify(messagesOld));
+      for (var i = 0; i < messages.length; i++) {
+        if (messages[i].sender_id === userId) {
+          messages[i].sender = userEmail;
+          messages[i].recipient = otherUserEmail;
+        } else {
+          messages[i].sender = otherUserEmail;
+          messages[i].recipient = userEmail;
+        }
+      }
+      return messages;
+    })
+    .then(JSON.stringify)
+    .then(res.end);
   });
 
   router.get('/currentuser', (req, res) => {

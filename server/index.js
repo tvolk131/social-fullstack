@@ -93,7 +93,7 @@ io.use(passportSocketIo.authorize({
 io.on('connection', (socket) => {
   console.log('A user has connected');
   if (socket.request.user.id) {
-    sockets[socket.request.user.email] = socket;
+    sockets[socket.request.user.id] = socket;
   }
   socket.on('disconnect', () => {
     console.log('A user has disconnected');
@@ -103,14 +103,30 @@ io.on('connection', (socket) => {
   });
   socket.on('message', (messageString) => {
     var message = JSON.parse(messageString);
-    db.saveMessage(socket.request.user.email, message.username, message.text).then((data) => {
-      // Key is an email
+    var userEmail = socket.request.user.email;
+    var userId = socket.request.user.id;
+    var otherUserId;
+    var otherUserEmail = message.email;
+    db.getUser({email: message.email}).then((user) => {
+      otherUserId = user.dataValues.id;
+    })
+    .then(() => {
+      return db.addMessage(userId, otherUserId, message.text);
+    })
+    .then((messageData) => {
+      var message = JSON.parse(JSON.stringify(messageData.dataValues));
+      message.sender = userEmail;
+      message.recipient = otherUserEmail;
+      return message;
+    })
+    .then((message) => {
+      // Key is a user ID
       for (var key in sockets) {
-        if (socket.request.user.email === key || message.username === key) {
-          sockets[key].emit('message', JSON.stringify(data));
+        if (userId.toString() === key || otherUserId.toString() === key) {
+          sockets[key].emit('message', JSON.stringify(message));
         }
       }
-      return data;
+      return message;
     });
   });
 });

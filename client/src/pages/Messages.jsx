@@ -60,8 +60,8 @@ class Messages extends React.Component {
     window.location.href = '/messages?user=' + username;
   }
 
-  sendMessage(username, text) {
-    this.socket.emit('message', JSON.stringify({username, text}));
+  sendMessage(email, text) {
+    this.socket.emit('message', JSON.stringify({email, text}));
   }
 
   render() {
