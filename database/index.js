@@ -46,36 +46,37 @@ module.exports.addFriend = (frienderUserId, friendeeUserId) => {
                 ]
             }
         }).then((data) => {
-            if (data.length === 0) {
-                return models.friends.create({
-                    friender_id: frienderUserId,
-                    friendee_id: friendeeUserId,
-                    friender_accepted: true,
-                    friendee_accepted: false
-                });
-            } else if (data.length === 1) {
-                var friendeeHasAccepted = data[0].dataValues.friendee_accepted;
-                if (!friendeeHasAccepted) {
-                    models.friends.update({
+            if (frienderUserId && friendeeUserId) {
+                if (data.length === 0) {
+                    return models.friends.create({
+                        friender_id: frienderUserId,
+                        friendee_id: friendeeUserId,
                         friender_accepted: true,
-                        friendee_accepted: true
-                    }, {
-                        where: {
-                            $or: [
-                                {
-                                    friender_id: frienderUserId,
-                                    friendee_id: friendeeUserId
-                                },
-                                {
-                                    friender_id: friendeeUserId,
-                                    friendee_id: frienderUserId
-                                }
-                            ]
-                        }
+                        friendee_accepted: false
                     });
+                } else if (data.length === 1) {
+                    var friendeeHasAccepted = data[0].dataValues.friendee_accepted;
+                    if (!friendeeHasAccepted) {
+                        models.friends.update({
+                            friender_accepted: true,
+                            friendee_accepted: true
+                        }, {
+                            where: {
+                                $or: [
+                                    {
+                                        friender_id: frienderUserId,
+                                        friendee_id: friendeeUserId
+                                    },
+                                    {
+                                        friender_id: friendeeUserId,
+                                        friendee_id: frienderUserId
+                                    }
+                                ]
+                            }
+                        });
+                    }
                 }
             }
-            console.log(data);
         });
     }
 };
