@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 import Navbar from '../components/Navbar.jsx';
+import FriendRequestList from '../components/FriendRequestList.jsx';
+import io from 'socket.io-client';
 
 class Home extends React.Component {
   constructor(props) {
@@ -9,6 +11,7 @@ class Home extends React.Component {
       user: {}
     }
     this.getData();
+    this.socket = io();
   }
 
   getData () {
@@ -22,8 +25,8 @@ class Home extends React.Component {
     return (
       <div>
         <Navbar/>
-        <div>HOMEPAGE</div>
-        <div>User: {this.state.user.firstname} {this.state.user.lastname}</div>
+        <div>Welcome, {this.state.user.firstname}</div>
+        <FriendRequestList socket={this.socket} />
       </div>
     ) 
   }
