@@ -76,7 +76,7 @@ module.exports = (sockets) => {
     }).catch((err) => {
       res.end('The email you entered is not linked to an existing user');
     }).then(() => {
-      return db.addFriend(frienderId, friendeeId);
+      return db.addFriend(frienderId, friendeeId, 'create');
     }).then(() => {
       res.end('Friend request sent');
     });
@@ -85,7 +85,7 @@ module.exports = (sockets) => {
   router.post('/acceptfriendrequest', (req, res) => {
     var frienderId = req.user.id;
     var friendeeId = req.body.friendId;
-    db.addFriend(frienderId, friendeeId).then(() => {
+    db.addFriend(frienderId, friendeeId, 'accept').then(() => {
       res.end('Friend request accepted');
     });
   });

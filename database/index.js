@@ -30,8 +30,9 @@ module.exports.addMessage = (senderId, recipientId, text) => {
 
 // Adds a user-to-user friend relationship, automatically
 // disallowing duplicate duplicate entries
-module.exports.addFriend = (frienderUserId, friendeeUserId) => {
-    if (frienderUserId && friendeeUserId && frienderUserId != friendeeUserId) {
+// addType is a string containing either 'create' or 'accept'
+module.exports.addFriend = (frienderUserId, friendeeUserId, addType) => {
+    if (frienderUserId && friendeeUserId && frienderUserId != friendeeUserId && (addType == 'create' || addType === 'accept')) {
         return models.friends.findAll({
             where: {
                 $or: [
@@ -46,14 +47,14 @@ module.exports.addFriend = (frienderUserId, friendeeUserId) => {
                 ]
             }
         }).then((data) => {
-            if (data.length === 0) {
+            if (data.length === 0 && addType === 'create') {
                 return models.friends.create({
                     friender_id: frienderUserId,
                     friendee_id: friendeeUserId,
                     friender_accepted: true,
                     friendee_accepted: false
                 });
-            } else if (data.length === 1) {
+            } else if (data.length === 1 && addType === 'accept') {
                 var friendeeHasAccepted = data[0].dataValues.friendee_accepted;
                 if (!friendeeHasAccepted) {
                     models.friends.update({
