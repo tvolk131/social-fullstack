@@ -170,12 +170,20 @@ module.exports.getFriendData = (userId) => {
     });
 };
 
-module.exports.createPost = (username, text) => {
+module.exports.createPost = (userId, text) => {
+    return models.posts.create({
+        user_id: userId,
+        text: text
+    });
 };
 
-// Gets all posts by the provided user's friends
-module.exports.getPosts = (username) => {
-
+// Gets all posts by the provided user ID
+module.exports.getPostsBy = (userId) => {
+    return models.posts.findAll({
+        where: {
+            user_id: userId
+        }
+    });
 };
 
 // Gets all comments on a particular post
