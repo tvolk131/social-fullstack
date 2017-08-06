@@ -25,6 +25,10 @@ class Messages extends React.Component {
     });
   }
 
+  componentDidMount () {
+    this.interval = setInterval(this.forceUpdate.bind(this), 1000);
+  }
+
   handleInputChange (property, e) {
     var stateChange = {};
     stateChange[property] = e.target.value;
