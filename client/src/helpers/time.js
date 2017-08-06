@@ -11,9 +11,6 @@ if (relativeTime) {
     var yearsSinceSent = monthsSinceSent / 12;
 
     secondsSinceSent = Math.round(secondsSinceSent);
-    if(secondsSinceSent <= 0) {
-        return 'Just now';
-    }
     minutesSinceSent = Math.round(minutesSinceSent);
     hoursSinceSent = Math.round(hoursSinceSent);
     daysSinceSent = Math.round(daysSinceSent);
@@ -23,10 +20,10 @@ if (relativeTime) {
 
     if (secondsSinceSent < 60) {
         var seconds = Math.round(secondsSinceSent);
-        if (seconds === 1) {
-            return seconds + ' second ago';
+        if (seconds <= 5) {
+            return 'Just now';
         } else {
-            return seconds + ' seconds ago';
+            return 'less than a minute ago';
         }
     }
     if (minutesSinceSent < 60) {
