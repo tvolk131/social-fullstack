@@ -18,26 +18,6 @@ module.exports = (sockets) => {
     db.getMessages(user, otherUser).then(JSON.stringify).then(res.end);
   });
 
-  router.post('/messages', isLoggedIn, (req, res) => {
-    var message = {
-      sender: req.user.email,
-      recipient: req.body.username,
-      text: req.body.text
-    };
-    var user = req.user.email;
-    console.log(req.body);
-    db.saveMessage(user, req.body.username, req.body.text).then((data) => {
-      // Key should be an email
-      for (var key in sockets) {
-        if (req.user.email === key || req.body.username === key) {
-          sockets[key].emit('message', JSON.stringify(data));
-        }
-      }
-      res.end('Message sent!');
-      return data;
-    });
-  });
-
   router.get('/currentuser', (req, res) => {
     console.log(JSON.stringify(req.user));
     var userData = {

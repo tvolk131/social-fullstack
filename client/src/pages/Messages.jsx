@@ -17,6 +17,7 @@ class Messages extends React.Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.fetchMessages(); // Loads messages on initial load or redirect from messages with another user
     this.socket = io();
+    // Updates messages that have been after since the page was loaded
     this.socket.on('message', (message) => {
       console.log(message);
       this.state.messages.push(JSON.parse(message));
@@ -56,9 +57,7 @@ class Messages extends React.Component {
   }
 
   sendMessage(username, text) {
-    console.log(username);
-    return axios.post('/api/messages', {username, text}).then(console.log);
-    // this.socket.emit('message', JSON.stringify({username, text}));
+    this.socket.emit('message', JSON.stringify({username, text}));
   }
 
   render() {

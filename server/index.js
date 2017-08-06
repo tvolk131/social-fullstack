@@ -100,5 +100,17 @@ io.on('connection', (socket) => {
     if (socket.request.user.id) {
       delete sockets[socket.request.user.id];
     }
-  })
+  });
+  socket.on('message', (messageString) => {
+    var message = JSON.parse(messageString);
+    db.saveMessage(socket.request.user.email, message.username, message.text).then((data) => {
+      // Key is an email
+      for (var key in sockets) {
+        if (socket.request.user.email === key || message.username === key) {
+          sockets[key].emit('message', JSON.stringify(data));
+        }
+      }
+      return data;
+    });
+  });
 });
