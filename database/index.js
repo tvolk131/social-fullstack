@@ -90,8 +90,20 @@ module.exports.saveMessage = (senderUsername, recipientUsername, text) => {
     });
 };
 
-module.exports.addFriend = (frienderUsername, friendeeUsername) => {
-    if (frienderUsername != friendeeUsername) {
+module.exports.addFriend = (frienderUserId, friendeeUserId) => {
+    if (frienderUserId != friendeeUserId) {
+        models.friends.findAll({
+            where: {
+                friender_id: frienderUserId,
+                friendee_id: friendeeUserId
+            }
+        }).then((data) => {
+            return data.length === 0;
+        }).then((isUnique) => {
+            if (isUnique) {
+                return models.friends.create({friender_id: frienderUserId, friendee_id: friendeeUserId});
+            }
+        });
     }
 };
 
