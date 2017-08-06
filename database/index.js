@@ -186,6 +186,19 @@ module.exports.getPostsBy = (userId) => {
     });
 };
 
+module.exports.addComment = (userId, postId, text) => {
+    return models.comments.create({
+        user_id: userId,
+        post_id: postId,
+        text: text
+    });
+};
+
 // Gets all comments on a particular post
-module.exports.addComment = (username, commentId) => {
+module.exports.getComments = (postId) => {
+    return models.comments.findAll({
+        where: {
+            post_id: postId
+        }
+    });
 };
