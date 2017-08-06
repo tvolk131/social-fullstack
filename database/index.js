@@ -89,3 +89,27 @@ module.exports.saveMessage = (senderUsername, recipientUsername, text) => {
         //Do nothing
     });
 };
+
+module.exports.addFriend = (frienderUsername, friendeeUsername) => {
+    if (frienderUsername != friendeeUsername) {
+    }
+};
+
+// Returns a promise containing an object that has data about friends and open friend requests
+// -------------------------------------------------------------------------------------------
+// This is done all in one method because all friend data is searched through anyway, so if
+// more than one data set is needed then only one search is performed
+module.exports.getFriendData = (username) => {
+};
+
+module.exports.createPost = (username, text) => {
+};
+
+// Gets all posts by the provided user's friends
+module.exports.getPosts = (username) => {
+
+};
+
+// Gets all comments on a particular post
+module.exports.addComment = (username, commentId) => {
+};
