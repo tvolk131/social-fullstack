@@ -96,6 +96,25 @@ Posts.belongsTo(Users, {
 });
 db.posts = Posts;
 
+// COMMENTS SCHEMA
+var Comments = sequelize.define('comments', {
+    id: {
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER
+    },
+    text: {
+        type: Sequelize.STRING,
+        allowNull: false
+    }
+});
+Comments.belongsTo(Users, {
+    foreignKey: 'user_id'
+});
+Comments.belongsTo(Posts, {
+    foreignKey: 'post_id'
+});
+db.comments = Comments;
 
 
 
