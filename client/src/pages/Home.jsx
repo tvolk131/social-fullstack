@@ -25,11 +25,6 @@ class Home extends React.Component {
       this.setState({friendRequestsReceived: data.data.friendRequestsReceived});
       this.forceUpdate();
     });
-    // this.socket.on('friend request', (requestString) => {
-    //   var request = JSON.parse(requestString);
-    //   this.state.requests.push(request);
-    //   this.forceUpdate();
-    // });
   }
 
   getData () {
@@ -44,7 +39,7 @@ class Home extends React.Component {
       <div>
         <Navbar/>
         <div>Welcome, {this.state.user.firstname}</div>
-        <FriendRequestList requests={this.state.friendRequestsReceived} forceUpdate={this.forceUpdate.bind(this)} />
+        <FriendRequestList requests={this.state.friendRequestsReceived} forceUpdate={this.forceUpdate.bind(this)} socket={this.socket} />
         <FrienderPanel />
       </div>
     ) 
