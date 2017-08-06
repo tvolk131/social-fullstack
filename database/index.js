@@ -143,7 +143,7 @@ module.exports.getFriendData = (userId) => {
             getUserPromises.push(
                 models.users.findOne({
                     where: {
-                        id: userId === requestSent.friender_id ? requestSent.friendee_id : requestSent.friender_id
+                        id: userId === requestSent.friendee_id
                     }
                 }).then((user) => {
                     requestSent.friend = user;
@@ -157,7 +157,7 @@ module.exports.getFriendData = (userId) => {
             getUserPromises.push(
                 models.users.findOne({
                     where: {
-                        id: userId === requestReceived.friender_id ? requestReceived.friendee_id : requestReceived.friender_id
+                        id: requestReceived.friender_id
                     }
                 }).then((user) => {
                     requestReceived.friend = user;
