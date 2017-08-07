@@ -8,7 +8,7 @@ class FriendList extends React.Component {
 
   render () {
     return (
-      <div className='friend-list'>
+      <div className='friend-list panel'>
         <div>Friends</div>
         {this.props.friends.map((request, index) => {
           return <Friend user={request.friend} forceUpdateList={this.props.forceUpdate.bind(this)} key={index} />;

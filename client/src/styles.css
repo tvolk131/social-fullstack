@@ -24,11 +24,15 @@ body {
     overflow: hidden;
 }
 
-.message-list {
-    padding: 20px;
-}
 .message {
     padding: 10px;
+}
+
+.panel {
+    background: #8D99AE;
+    border-radius: 1em;
+    padding: 10px;
+    margin: 10px;
 }
 
 a {

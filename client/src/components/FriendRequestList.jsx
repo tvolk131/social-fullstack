@@ -8,7 +8,7 @@ class FriendRequestList extends React.Component {
 
   render () {
     return (
-      <div className='friend-request-list'>
+      <div className='friend-request-list panel'>
         <div>Friend Requests</div>
         {this.props.requests.map((request, index) => {
           return <FriendRequest user={request.friend} forceUpdateList={this.props.forceUpdate} key={index} />;

@@ -71,7 +71,7 @@ class Messages extends React.Component {
         <div>Messages</div>
         <input type='text' value={this.state.newOtherUserName} onChange={this.handleInputChange.bind(this, 'newOtherUserName')} /><br/>
         <button onClick={this.changeUserSelected.bind(this, this.state.newOtherUserName)}>Fetch Messages</button><br/>
-        <div className='message-list'>
+        <div className='message-list panel'>
           {this.state.messages.map((message, index) => {
             return <Message user={message.sender} text={message.text} timestamp={message.createdAt} key={index} />
           })}

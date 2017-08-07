@@ -30,7 +30,7 @@ class FrienderPanel extends React.Component {
 
   render () {
     return (
-      <div className='friender-panel'>
+      <div className='friender-panel panel'>
         <div>Add Friends</div>
         User:<br/><input type='text' value={this.state.userToAdd} onChange={this.handleInputChange.bind(this, 'userToAdd')} /><br/>
         <button onClick={this.sendFriendRequest}>Send Request</button>
