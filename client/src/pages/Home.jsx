@@ -66,17 +66,17 @@ class Home extends React.Component {
       var message = JSON.parse(messageString);
       for (var i = 0; i < this.state.friends.length; i++) {
         if (this.state.friends[i].friend.id === message.unfriender.id || this.state.friends[i].friend.id === message.unfriendee.id) {
-          this.state.friends.splice(i);
+          this.state.friends.splice(i, 1);
         }
       }
       for (var i = 0; i < this.state.friendRequestsSent.length; i++) {
         if (this.state.friendRequestsSent[i].friend.id === message.unfriender.id || this.state.friendRequestsSent[i].friend.id === message.unfriendee.id) {
-          this.state.friendRequestsSent.splice(i);
+          this.state.friendRequestsSent.splice(i, 1);
         }
       }
       for (var i = 0; i < this.state.friendRequestsReceived.length; i++) {
         if (this.state.friendRequestsReceived[i].friend.id === message.unfriender.id || this.state.friendRequestsReceived[i].friend.id === message.unfriendee.id) {
-          this.state.friendRequestsReceived.splice(i);
+          this.state.friendRequestsReceived.splice(i, 1);
         }
       }
       this.forceUpdate();
