@@ -10,8 +10,9 @@ class FriendRequest extends React.Component {
   acceptRequest () {
     axios.post('/api/acceptfriendrequest', {
       friendId: this.props.user.id
+    }).then(() => {
+      this.props.forceUpdateList();
     });
-    this.props.forceUpdateList();
   }
 
   render () {

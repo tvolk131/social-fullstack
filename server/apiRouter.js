@@ -90,6 +90,14 @@ module.exports = (sockets) => {
     });
   });
 
+  router.post('/removefriend', (req, res) => {
+    var unfrienderId = req.user.id;
+    var unfriendeeId = req.body.friendId;
+    db.removeFriend(unfrienderId, unfriendeeId).then(() => {
+      res.end();
+    });
+  });
+
   router.get('/*', (req, res) => {
     res.end();
   });

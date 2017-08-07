@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 
 class SentFriendRequest extends React.Component {
   constructor (props) {
@@ -9,8 +10,9 @@ class SentFriendRequest extends React.Component {
   revokeRequest () {
     axios.post('/api/removefriend', {
       friendId: this.props.user.id
+    }).then(() => {
+      this.props.forceUpdateList();
     });
-    this.props.forceUpdateList();
   }
 
   render () {
