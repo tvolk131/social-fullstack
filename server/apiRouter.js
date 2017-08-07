@@ -66,10 +66,10 @@ module.exports = (sockets) => {
     var friendee;
     db.getUser({email: req.body.userEmail}).then((user) => {
       friendee = user;
-    }).catch((err) => {
-      res.end('The email you entered is not linked to an existing user');
     }).then(() => {
       return db.addFriend(friender.id, friendee.id, 'create');
+    }).catch((err) => {
+      res.end('The email you entered is not linked to an existing user');
     }).then((data) => {
       if (data) {
         for (var key in sockets) {
