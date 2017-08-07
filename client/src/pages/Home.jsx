@@ -18,8 +18,21 @@ class Home extends React.Component {
     }
     this.getData();
     this.socket = io();
-
-
+    this.socket.on('add friend send request', (message) => {
+      console.log(message);
+      // this.state.messages.push(JSON.parse(message));
+      // this.forceUpdate();
+    });
+    this.socket.on('add friend accept request', (message) => {
+      console.log(message);
+      // this.state.messages.push(JSON.parse(message));
+      // this.forceUpdate();
+    });
+    this.socket.on('remove friend', (message) => {
+      console.log(message);
+      // this.state.messages.push(JSON.parse(message));
+      // this.forceUpdate();
+    });
 
     axios.get('/api/frienddata').then((data) => {
       this.setState({friends: data.data.friends});
