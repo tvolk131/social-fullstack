@@ -122,8 +122,7 @@ module.exports.getFriendData = (userId) => {
         var friendData = JSON.parse(JSON.stringify(friendDataOld));
 
         var getUserPromises = [];
-        for (var index in friendData.friends) {
-            var friend = friendData.friends[index];
+        friendData.friends.forEach((friend) => {
             delete friend.friender_accepted;
             delete friend.friendee_accepted;
             getUserPromises.push(
@@ -135,36 +134,35 @@ module.exports.getFriendData = (userId) => {
                     friend.friend = user;
                 })
             );
-        }
-        for (var index in friendData.friendRequestsSent) {
-            var requestSent = friendData.friendRequestsSent[index];
-            delete requestSent.friender_accepted;
-            delete requestSent.friendee_accepted;
+        });
+        friendData.friendRequestsSent.forEach((friendRequest) => {
+            delete friendRequest.friender_accepted;
+            delete friendRequest.friendee_accepted;
             getUserPromises.push(
                 models.users.findOne({
                     where: {
-                        id: userId === requestSent.friendee_id
+                        id: userId === friendRequest.friendee_id
                     }
                 }).then((user) => {
-                    requestSent.friend = user;
+                    friendRequest.friend = user;
                 })
             );
-        }
-        for (var index in friendData.friendRequestsReceived) {
-            var requestReceived = friendData.friendRequestsReceived[index];
-            delete requestReceived.friender_accepted;
-            delete requestReceived.friendee_accepted;
+        });
+        friendData.friendRequestsReceived.forEach((friendRequest) => {
+            delete friendRequest.friender_accepted;
+            delete friendRequest.friendee_accepted;
             getUserPromises.push(
                 models.users.findOne({
                     where: {
-                        id: requestReceived.friender_id
+                        id: friendRequest.friender_id
                     }
                 }).then((user) => {
-                    requestReceived.friend = user;
+                    friendRequest.friend = user;
                 })
             );
-        }
+        });
         return Promise.all(getUserPromises).then(() => {
+            console.log('DONE!!!');
             return friendData;
         });
     });
