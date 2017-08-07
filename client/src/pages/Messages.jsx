@@ -9,8 +9,12 @@ class Messages extends React.Component {
     super(props);
     var urlParams = new URLSearchParams(window.location.search);
     this.state = {
-      otherUserName: urlParams.get('user'),
-      newOtherUserName: '',
+      friends: [],
+      otherUser: {
+        firstname: '',
+        lastname: '',
+        email: urlParams.get('user')
+      },
       pendingMessage: '',
       messages: []
     };
@@ -21,6 +25,14 @@ class Messages extends React.Component {
     this.socket.on('message', (message) => {
       this.state.messages.push(JSON.parse(message));
       this.forceUpdate();
+    });
+    axios.get('/api/frienddata').then((data) => {
+      this.setState({friends: data.data.friends});
+      for (var i = 0; i < this.state.friends.length; i++) {
+        if (this.state.friends[i].friend.email === urlParams.get('user')) {
+          this.setState({otherUser: this.state.friends[i].friend});
+        }
+      }
     });
   }
 
@@ -67,16 +79,19 @@ class Messages extends React.Component {
     return (
       <div>
         <Navbar/>
-        <div>Messages</div>
-        <input type='text' value={this.state.newOtherUserName} onChange={this.handleInputChange.bind(this, 'newOtherUserName')} /><br/>
-        <button onClick={this.changeUserSelected.bind(this, this.state.newOtherUserName)}>Fetch Messages</button><br/>
+        <div>Messages with {this.state.otherUser.firstname} {this.state.otherUser.lastname}</div>
+        <select>
+          {this.state.friends.map((friend, index) => {
+            return <option value='test' key={index}>{friend.friend.firstname} {friend.friend.lastname} ({friend.friend.email})</option>
+          })}
+        </select>
         <div className='message-list panel'>
           {this.state.messages.map((message, index) => {
-            return <Message user={message.sender} text={message.text} timestamp={message.createdAt} key={index} />
+            return <Message message={message} key={index} />
           })}
         </div>
         <input type='text' value={this.state.pendingMessage} onChange={this.handleInputChange.bind(this, 'pendingMessage')} /><br/>
-        <button onClick={this.sendMessage.bind(this, this.state.otherUserName, this.state.pendingMessage)}>Send</button><br/>
+        <button onClick={this.sendMessage.bind(this, this.state.otherUser.email, this.state.pendingMessage)}>Send</button><br/>
       </div>
     ) 
   }

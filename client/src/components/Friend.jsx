@@ -22,7 +22,7 @@ class FriendRequest extends React.Component {
 
   render () {
     return (
-      <div className='friend'>
+      <div className='friend subpanel'>
         <div>{this.props.user.firstname} {this.props.user.lastname}</div>
         <button onClick={this.redirectToMessage}>Message</button>
         <button onClick={this.unfriend}>Unfriend</button>

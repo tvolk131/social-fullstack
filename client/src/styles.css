@@ -24,15 +24,19 @@ body {
     overflow: hidden;
 }
 
-.message {
+.subpanel {
     padding: 10px;
+    background: #6D798E;
+    border-radius: 0.25em;
+    margin: 5px;
 }
 
 .panel {
     background: #8D99AE;
-    border-radius: 1em;
+    border-radius: 0.5em;
     padding: 10px;
     margin: 10px;
+    max-width: 400px;
 }
 
 .panel .title {

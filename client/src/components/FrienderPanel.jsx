@@ -32,7 +32,7 @@ class FrienderPanel extends React.Component {
     return (
       <div className='friender-panel panel'>
         <div className='title'>Add Friends</div>
-        User:<br/><input type='text' value={this.state.userToAdd} onChange={this.handleInputChange.bind(this, 'userToAdd')} /><br/>
+        User's Email:<br/><input type='text' value={this.state.userToAdd} onChange={this.handleInputChange.bind(this, 'userToAdd')} /><br/>
         <button onClick={this.sendFriendRequest}>Send Request</button>
       </div>
     ) 

@@ -8,10 +8,10 @@ class Message extends React.Component {
 
   render () {
     return (
-      <div className='message'>
-        <div>{this.props.user}</div>
-        <div>{this.props.text}</div>
-        <div>{time.parse(this.props.timestamp, true)}</div>
+      <div className='message subpanel'>
+        <div>{this.props.message.sender}</div>
+        <div>{this.props.message.text}</div>
+        <div>{time.parse(this.props.message.createdAt, true)}</div>
       </div>
     ) 
   }

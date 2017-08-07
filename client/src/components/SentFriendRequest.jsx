@@ -18,7 +18,7 @@ class SentFriendRequest extends React.Component {
   render () {
     return (
       <div className='friend-request'>
-        <div>{this.props.user.firstname} {this.props.user.lastname}</div>
+        <div>{this.props.user.firstname} {this.props.user.lastname} ({this.props.user.email})</div>
         <button onClick={this.revokeRequest}>Revoke Request</button>
       </div>
     ) 

@@ -86,7 +86,6 @@ class Home extends React.Component {
       this.setState({friends: data.data.friends});
       this.setState({friendRequestsSent: data.data.friendRequestsSent});
       this.setState({friendRequestsReceived: data.data.friendRequestsReceived});
-      this.forceUpdate();
     });
   }
 
