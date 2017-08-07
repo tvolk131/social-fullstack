@@ -5,6 +5,7 @@ class FriendRequest extends React.Component {
   constructor (props) {
     super(props);
     this.unfriend = this.unfriend.bind(this);
+    this.redirectToMessage = this.redirectToMessage.bind(this);
   }
 
   unfriend () {
@@ -15,11 +16,15 @@ class FriendRequest extends React.Component {
     });
   }
 
+  redirectToMessage () {
+    window.location.href = '/messages?user=' + this.props.user.email;
+  }
+
   render () {
     return (
       <div className='friend'>
         <div>{this.props.user.firstname} {this.props.user.lastname}</div>
-        <button>Message</button>
+        <button onClick={this.redirectToMessage}>Message</button>
         <button onClick={this.unfriend}>Unfriend</button>
       </div>
     ) 
