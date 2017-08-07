@@ -21,6 +21,9 @@ module.exports.getMessages = (senderId, recipientId) => {
 module.exports.getUser = (userInfoObj) => {
     return models.users.findOne({
         where: userInfoObj
+    }).then((user) => {
+        delete user.password; // Prevents user passwords from being retrieved and sent over the internet by mistake
+        return user;
     });
 };
 
