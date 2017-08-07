@@ -49,13 +49,7 @@ module.exports = (sockets) => {
   });
 
   router.get('/currentuser', (req, res) => {
-    var userData = {
-      firstname: req.user.firstname,
-      lastname: req.user.lastname,
-      email: req.user.email,
-      createdAt: req.user.createdAt
-    };
-    res.send(JSON.stringify(userData));
+    res.send(JSON.stringify(req.user));
   });
 
   router.get('/frienddata', (req, res) => {
@@ -78,12 +72,16 @@ module.exports = (sockets) => {
     }).then(() => {
       return db.addFriend(friender.id, friendee.id, 'create');
     }).then((data) => {
-      for (var key in sockets) {
-        if (friender.id.toString() === key || friendee.id.toString() === key) {
-          sockets[key].emit('add friend send request', JSON.stringify({friender, friendee}));
+      if (data) {
+        for (var key in sockets) {
+          if (friender.id.toString() === key || friendee.id.toString() === key) {
+            sockets[key].emit('add friend send request', JSON.stringify({friender, friendee}));
+          }
         }
+        res.end('Friend request sent');
+      } else {
+        res.end('Something went wrong when submitting friend request');
       }
-      res.end('Friend request sent');
     });
   });
 

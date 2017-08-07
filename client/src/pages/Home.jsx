@@ -16,22 +16,71 @@ class Home extends React.Component {
       friendRequestsSent: [],
       friendRequestsReceived: []
     }
-    this.getData();
+    this.getCurrentUser();
     this.socket = io();
-    this.socket.on('add friend send request', (message) => {
-      console.log(message);
-      // this.state.messages.push(JSON.parse(message));
-      // this.forceUpdate();
+    this.socket.on('add friend send request', (messageString) => {
+      var message = JSON.parse(messageString);
+      var request = {
+        createdAt: message.createdAt,
+        updatedAt: message.updatedAt,
+        friender_id: message.friender.id,
+        friendee_id: message.friendee.id
+      };
+      if (request.friender_id === this.state.user.id) {
+        request.friend = message.friendee;
+        this.state.friendRequestsSent.push(request);
+      } else {
+        request.friend = message.friender;
+        this.state.friendRequestsReceived.push(request);
+      }
+      this.forceUpdate();
     });
-    this.socket.on('add friend accept request', (message) => {
-      console.log(message);
-      // this.state.messages.push(JSON.parse(message));
-      // this.forceUpdate();
+    this.socket.on('add friend accept request', (messageString) => {
+      var message = JSON.parse(messageString);
+      for (var i = 0; i < this.state.friendRequestsSent.length; i++) {
+        if (this.state.friendRequestsSent[i].friend.id === message.friender.id) {
+          this.state.friendRequestsSent.splice(i);
+        }
+      }
+      for (var i = 0; i < this.state.friendRequestsReceived.length; i++) {
+        if (this.state.friendRequestsReceived[i].friend.id === message.friendee.id) {
+          this.state.friendRequestsReceived.splice(i);
+        }
+      }
+      console.log(this.state.friends);
+      var friend = {
+        createdAt: message.createdAt,
+        updatedAt: message.updatedAt,
+        friender_id: message.friender.id,
+        friendee_id: message.friendee.id,
+      };
+      if (friend.friender_id === this.state.user.id) {
+        friend.friend = message.friendee;
+        this.state.friends.push(friend);
+      } else {
+        friend.friend = message.friender;
+        this.state.friends.push(friend);
+      }
+      this.forceUpdate();
     });
-    this.socket.on('remove friend', (message) => {
-      console.log(message);
-      // this.state.messages.push(JSON.parse(message));
-      // this.forceUpdate();
+    this.socket.on('remove friend', (messageString) => {
+      var message = JSON.parse(messageString);
+      for (var i = 0; i < this.state.friends.length; i++) {
+        if (this.state.friends[i].friend.id === message.unfriender.id || this.state.friends[i].friend.id === message.unfriendee.id) {
+          this.state.friends.splice(i);
+        }
+      }
+      for (var i = 0; i < this.state.friendRequestsSent.length; i++) {
+        if (this.state.friendRequestsSent[i].friend.id === message.unfriender.id || this.state.friendRequestsSent[i].friend.id === message.unfriendee.id) {
+          this.state.friendRequestsSent.splice(i);
+        }
+      }
+      for (var i = 0; i < this.state.friendRequestsReceived.length; i++) {
+        if (this.state.friendRequestsReceived[i].friend.id === message.unfriender.id || this.state.friendRequestsReceived[i].friend.id === message.unfriendee.id) {
+          this.state.friendRequestsReceived.splice(i);
+        }
+      }
+      this.forceUpdate();
     });
 
     axios.get('/api/frienddata').then((data) => {
@@ -42,7 +91,7 @@ class Home extends React.Component {
     });
   }
 
-  getData () {
+  getCurrentUser () {
     axios.get('/api/currentuser')
     .then((data) => {
       this.setState({user: data.data});
