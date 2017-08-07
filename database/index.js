@@ -127,12 +127,14 @@ module.exports.getFriendData = (userId) => {
         var friendRequestsReceived = [];
         for (var i = 0; i < friendLinks.length; i++) {
             if (friendLinks[i].friender_accepted || friendLinks[i].friendee_accepted) {
-                if (friendLinks[i].friendee_id === userId) {
+                if (friendLinks[i].friender_accepted && friendLinks[i].friendee_accepted) {
+                    friends.push(friendLinks[i]);
+                } else if (friendLinks[i].friendee_id === userId) {
                     friendRequestsReceived.push(friendLinks[i]);
                 } else if (friendLinks[i].friender_id === userId) {
                     friendRequestsSent.push(friendLinks[i]);
                 } else {
-                    friends.push(friendLinks[i]);
+                    console.error('Oh no! There was an error getting friend data!')
                 }
             }
         }
