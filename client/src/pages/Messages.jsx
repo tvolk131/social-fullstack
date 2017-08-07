@@ -62,6 +62,7 @@ class Messages extends React.Component {
 
   sendMessage(email, text) {
     this.socket.emit('message', JSON.stringify({email, text}));
+    this.setState({pendingMessage: ''});
   }
 
   render() {
