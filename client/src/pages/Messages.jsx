@@ -19,6 +19,7 @@ class Messages extends React.Component {
       messages: []
     };
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.changeUser = this.changeUser.bind(this);
     this.fetchMessages(); // Loads messages on initial load or redirect from messages with another user
     this.socket = io();
     // Updates messages that have been after since the page was loaded
@@ -28,6 +29,7 @@ class Messages extends React.Component {
     });
     axios.get('/api/frienddata').then((data) => {
       this.setState({friends: data.data.friends});
+      this.setState({userSelectValue: this.state.friends[0].friend.email});
       for (var i = 0; i < this.state.friends.length; i++) {
         if (this.state.friends[i].friend.email === urlParams.get('user')) {
           this.setState({otherUser: this.state.friends[i].friend});
@@ -44,6 +46,10 @@ class Messages extends React.Component {
     var stateChange = {};
     stateChange[property] = e.target.value;
     this.setState(stateChange);
+  }
+
+  changeUser () {
+    window.location.href = '/messages?user=' + this.state.userSelectValue;
   }
 
   // Fetches the messages between you and another person using your
@@ -66,10 +72,6 @@ class Messages extends React.Component {
     }
   }
 
-  changeUserSelected (username) {
-    window.location.href = '/messages?user=' + username;
-  }
-
   sendMessage(email, text) {
     this.socket.emit('message', JSON.stringify({email, text}));
     this.setState({pendingMessage: ''});
@@ -80,11 +82,12 @@ class Messages extends React.Component {
       <div>
         <Navbar/>
         <div>Messages with {this.state.otherUser.firstname} {this.state.otherUser.lastname}</div>
-        <select>
+        <select onChange={this.handleInputChange.bind(this, 'userSelectValue')} value={this.state.userSelectValue}>
           {this.state.friends.map((friend, index) => {
-            return <option value='test' key={index}>{friend.friend.firstname} {friend.friend.lastname} ({friend.friend.email})</option>
+            return <option value={friend.friend.email} key={index}>{friend.friend.firstname} {friend.friend.lastname} ({friend.friend.email})</option>
           })}
         </select>
+        <button onClick={this.changeUser}>Message this friend instead!</button>
         <div className='message-list panel'>
           {this.state.messages.map((message, index) => {
             return <Message message={message} key={index} />
