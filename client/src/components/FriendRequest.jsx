@@ -5,10 +5,19 @@ class FriendRequest extends React.Component {
   constructor (props) {
     super(props);
     this.acceptRequest = this.acceptRequest.bind(this);
+    this.declineRequest = this.declineRequest.bind(this);
   }
 
   acceptRequest () {
     axios.post('/api/acceptfriendrequest', {
+      friendId: this.props.user.id
+    }).then(() => {
+      this.props.forceUpdateList();
+    });
+  }
+
+  declineRequest () {
+    axios.post('/api/removefriend', {
       friendId: this.props.user.id
     }).then(() => {
       this.props.forceUpdateList();
@@ -20,7 +29,7 @@ class FriendRequest extends React.Component {
       <div className='friend-request'>
         <div>{this.props.user.email}</div>
         <button onClick={this.acceptRequest}>Accept</button>
-        <button>Decline</button>
+        <button onClick={this.declineRequest}>Decline</button>
       </div>
     ) 
   }
