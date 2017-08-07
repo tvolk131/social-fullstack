@@ -11,12 +11,10 @@ const cookieParser = require('cookie-parser');
 const pageRouter = require('./pageRouter.js');
 const sessionstore = require('sessionstore');
 const passportSocketIo = require('passport.socketio');
+var sessionStore = sessionstore.createSessionStore();
 
 // Get models
 var models = require('../database/models/index.js');
-
-// Create session store (needs explicit definition because of socket.io authentication)
-var sessionStore = sessionstore.createSessionStore();
 
 // Initialize passport strategy
 require('../config/passport.js')(passport, models.users);
@@ -41,28 +39,7 @@ app.use(bodyParser.json());
 // Cookie parser
 app.use(cookieParser());
 
-var sockets = {};
-
-app.use('/api', apiRouter(sockets)); // API router manages sensitive data and makes sure not to leak unauthorized user info
-app.use('/', pageRouter); // Middleware redirector
-
-// Serve static files - Since we are using React Router, there are only two files
-app.get('/bundle.js', (req, res) => {
-  res.sendFile(path.resolve(__dirname + '/../client/dist/bundle.js'));
-});
-app.get('/*', (req, res) => {
-  res.sendFile(path.resolve(__dirname + '/../client/dist/index.html'));
-});
-
-// Start server
-let port = process.env.PORT || 8080;
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-http.listen(port, () => {
-  console.log('Listening on port ' + port);
-});
-
-// Setup passport and sessions for http and socket.io
+// Setup passport and sessions
 app.use(session({
   store: sessionStore,
   secret: 'thisisasecret',
@@ -71,6 +48,30 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session()); // Persistent login sessions
+
+var sockets = {};
+
+app.use('/api', apiRouter(sockets));
+app.use('/', pageRouter); // Middleware redirector
+
+// Serve static files
+app.get('/bundle.js', (req, res) => {
+  res.sendFile(path.resolve(__dirname + '/../client/dist/bundle.js'));
+});
+
+app.get('/*', (req, res) => {
+  res.sendFile(path.resolve(__dirname + '/../client/dist/index.html'));
+});
+
+
+let port = process.env.PORT || 8080;
+
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+http.listen(port, () => {
+  console.log('Listening on port ' + port);
+});
+
 io.use(passportSocketIo.authorize({
   key: 'connect.sid',
   secret: 'thisisasecret',
@@ -79,7 +80,6 @@ io.use(passportSocketIo.authorize({
   cookieParser: cookieParser
 }));
 
-// Handle client socket connections and add any needed socket listeners
 // TODO - Allow for any user to have multiple open sockets
 io.on('connection', (socket) => {
   console.log('A user has connected');
