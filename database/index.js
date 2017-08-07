@@ -160,7 +160,7 @@ module.exports.getFriendData = (userId) => {
             getUserPromises.push(
                 models.users.findOne({
                     where: {
-                        id: userId === friendRequest.friendee_id
+                        id: friendRequest.friendee_id
                     }
                 }).then((user) => {
                     friendRequest.friend = user;
