@@ -48,6 +48,7 @@ module.exports = (sockets) => {
     .then(res.end);
   });
 
+  // Returns data about the user who sent this request
   router.get('/currentuser', (req, res) => {
     res.send(JSON.stringify(req.user));
   });
