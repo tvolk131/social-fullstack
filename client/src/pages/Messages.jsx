@@ -19,7 +19,6 @@ class Messages extends React.Component {
     this.socket = io();
     // Updates messages that have been after since the page was loaded
     this.socket.on('message', (message) => {
-      console.log(message);
       this.state.messages.push(JSON.parse(message));
       this.forceUpdate();
     });
@@ -50,7 +49,6 @@ class Messages extends React.Component {
         return data.data;
       })
       .then((messages) => {
-        console.log(messages);
         setMessages(messages);
       });
     }

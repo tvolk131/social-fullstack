@@ -186,7 +186,6 @@ module.exports.getFriendData = (userId) => {
             );
         });
         return Promise.all(getUserPromises).then(() => {
-            console.log('DONE!!!');
             return friendData;
         });
     });

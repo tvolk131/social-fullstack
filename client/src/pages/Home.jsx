@@ -47,7 +47,6 @@ class Home extends React.Component {
           this.state.friendRequestsReceived.splice(i);
         }
       }
-      console.log(this.state.friends);
       var friend = {
         createdAt: message.createdAt,
         updatedAt: message.updatedAt,

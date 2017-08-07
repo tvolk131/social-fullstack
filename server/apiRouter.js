@@ -54,7 +54,6 @@ module.exports = (sockets) => {
 
   router.get('/frienddata', (req, res) => {
     db.getFriendData(req.user.id).then(JSON.stringify).then((data) => {
-      console.log(JSON.parse(data));
       res.end(data);
     });
   });
@@ -64,7 +63,6 @@ module.exports = (sockets) => {
   router.post('/addfriend', (req, res) => {
     var friender = req.user;
     var friendee;
-    console.log(req.body.userEmail);
     db.getUser({email: req.body.userEmail}).then((user) => {
       friendee = user;
     }).catch((err) => {
