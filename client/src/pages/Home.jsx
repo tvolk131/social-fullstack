@@ -3,6 +3,7 @@ import axios from 'axios';
 import Navbar from '../components/Navbar.jsx';
 import FriendRequestList from '../components/FriendRequestList.jsx';
 import FrienderPanel from '../components/FrienderPanel.jsx';
+import FriendList from '../components/FriendList.jsx';
 import io from 'socket.io-client';
 
 class Home extends React.Component {
@@ -41,6 +42,7 @@ class Home extends React.Component {
         <div>Welcome, {this.state.user.firstname}</div>
         <FriendRequestList requests={this.state.friendRequestsReceived} forceUpdate={this.forceUpdate.bind(this)} socket={this.socket} />
         <FrienderPanel />
+        <FriendList friends={this.state.friends} forceUpdate={this.forceUpdate.bind(this)} />
       </div>
     ) 
   }
