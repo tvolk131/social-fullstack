@@ -80,6 +80,25 @@ module.exports.addFriend = (frienderUserId, friendeeUserId, addType) => {
     }
 };
 
+// Wipes any friend relationship between two users
+// by removing either a friend request OR a friendship
+module.exports.removeFriend = (frienderUserId, friendeeUserId) => {
+    return models.friends.destroy({
+        where: {
+            $or: [
+                {
+                    friender_id: frienderUserId,
+                    friendee_id: friendeeUserId
+                },
+                {
+                    friender_id: friendeeUserId,
+                    friendee_id: frienderUserId
+                }
+            ]
+        }
+    });
+};
+
 // Returns a promise containing an object that has data about friends and open friend requests
 // -------------------------------------------------------------------------------------------
 // This is done all in one method because all friend data is searched through anyway, so if
